@@ -1,0 +1,17 @@
+flask_app/
+│
+├── static/
+│   ├── bills/                  # Folder to store generated PDFs
+│   ├── logo.png                # Shop logo image (optional)
+│   └── Qr.png                  # QR code image (optional)
+│
+├── templates/
+│   ├── index.html              # Home page template
+│   ├── billing.html            # Billing page template
+│   └── sales.html              # Sales data page template
+│
+├── sales.db                    # SQLite database file
+│
+├── app.py                      # Main Flask application file
+│
+└── requirements.txt            # Python dependencies (optional, but recommended)
