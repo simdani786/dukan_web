@@ -35,7 +35,7 @@ def billing():
         # Get form data
         customer_name = request.form.get("customer_name")
         bus_number = request.form.get("bus_number")
-        bill_number = generate_bill_number()
+        bill_number = generate_bill_number()  # Generate a new bill number
         date = datetime.now().strftime("%Y-%m-%d")
         total_amount = float(request.form.get("total_amount"))
 
@@ -67,26 +67,25 @@ def generate_bill_number():
     conn = sqlite3.connect("sales.db")
     cursor = conn.cursor()
     
-    # Get the last bill number from the database
     cursor.execute("SELECT bill_number FROM sales ORDER BY id DESC LIMIT 1")
     last_bill = cursor.fetchone()
     
     if last_bill:
-        # Extract the numeric part of the last bill number and increment it
-        last_number = int(last_bill[0].replace("BILL", ""))
+        last_number = int(last_bill[0])  
         new_number = last_number + 1
     else:
-        # If no bills exist, start from 1
         new_number = 1
     
     conn.close()
-    
-    # Format the new bill number with leading zeros
-    return f"BILL{new_number:05d}"
+    return f"{new_number:05d}"  
 
 @app.route("/generate_pdf", methods=["POST"])
 def generate_pdf():
     data = request.get_json()
+    
+    # Generate a new bill number
+    bill_number = generate_bill_number()
+    print("/generate_pdf",bill_number)
     
     # Save to database
     conn = sqlite3.connect("sales.db")
@@ -95,11 +94,11 @@ def generate_pdf():
         INSERT INTO sales (bill_number, date, customer_name, bus_number, total_amount)
         VALUES (?, ?, ?, ?, ?)
     """, (
-        data['bill_number'],
+        bill_number,
         data['date'],
         data['customer_name'],
         data['bus_number'],
-        sum(float(item['total']) for item in data['items'])  # Calculate total amount
+        sum(float(item['total']) for item in data['items'])  
     ))
     conn.commit()
     conn.close()
@@ -149,8 +148,7 @@ def generate_pdf():
     pdf.set_fill_color(245, 245, 245)
     col_width = 190
     pdf.cell(col_width, 6, txt=f"Customer:  {data['customer_name']}", ln=True,align="L")
-    pdf.cell(col_width, 6, txt=f"Bill Number:   {data['bill_number']}",ln=True, align="L")
-    
+    pdf.cell(col_width, 6, txt=f"Bill Number:   {bill_number}", ln=True, align="L")
     pdf.cell(col_width, 6, txt=f"Bus Number:    {data['bus_number']}",ln=True, align="L")
     pdf.cell(col_width, 6, txt=f"Date:  {data['date']}", ln=True, align="L")
     
@@ -224,11 +222,11 @@ def generate_pdf():
     pdf.cell(170, 5, txt="Authorized Signature", ln=True, align="R")
 
     # Save the PDF
-    output_path = os.path.join('static', 'bills', f"bill_{data['bill_number']}.pdf")
+    output_path = os.path.join('static', 'bills', f"bill_{bill_number}.pdf")
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     pdf.output(output_path)
 
-    return jsonify(f"/static/bills/bill_{data['bill_number']}.pdf")
+    return jsonify(f"/static/bills/bill_{bill_number}.pdf")
 
 
 if __name__ == "__main__":
