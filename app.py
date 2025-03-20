@@ -3,6 +3,8 @@ import sqlite3
 from datetime import datetime
 import os
 from fpdf import FPDF
+import json
+from collections import defaultdict
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
@@ -26,7 +28,7 @@ def init_db():
 # Home page
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return render_template("monthly_sales.html")
 
 # Billing page
 @app.route("/billing", methods=["GET", "POST"])
@@ -63,6 +65,53 @@ def sales():
     conn.close()
     return render_template("sales.html", sales_data=rows)
 
+@app.route("/monthly_sales")
+def monthly_sales():
+    return render_template("monthly_sales.html")
+
+@app.route("/api/monthly_sales_data")
+def monthly_sales_data():
+    try:
+        # Connect to the database
+        conn = sqlite3.connect("sales.db")
+        cursor = conn.cursor()
+        
+        # Get the sales data grouped by month
+        cursor.execute("""
+            SELECT 
+                strftime('%Y-%m', date) as month,
+                SUM(total_amount) as total_sales
+            FROM 
+                sales
+            GROUP BY 
+                strftime('%Y-%m', date)
+            ORDER BY 
+                month ASC
+        """)
+        
+        rows = cursor.fetchall()
+        conn.close()
+        
+        # Format the data for Chart.js
+        months = []
+        sales_amounts = []
+        
+        for row in rows:
+            month = row[0]  # Format: YYYY-MM
+            year_month = month.split('-')
+            # Convert month number to name (e.g., 01 to January)
+            month_name = datetime.strptime(month, '%Y-%m').strftime('%b %Y')
+            months.append(month_name)
+            sales_amounts.append(float(row[1]))
+        
+        return jsonify({
+            'labels': months,
+            'data': sales_amounts
+        })
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 def generate_bill_number():
     conn = sqlite3.connect("sales.db")
     cursor = conn.cursor()
@@ -83,6 +132,7 @@ def generate_bill_number():
 def get_bill_number():
     bill_number = generate_bill_number()
     return jsonify({"bill_number": bill_number})
+
 
 
 @app.route("/generate_pdf", methods=["POST"])
