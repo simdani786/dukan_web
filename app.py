@@ -79,6 +79,12 @@ def generate_bill_number():
     conn.close()
     return f"{new_number:05d}"  
 
+@app.route("/get_bill_number", methods=["GET"])
+def get_bill_number():
+    bill_number = generate_bill_number()
+    return jsonify({"bill_number": bill_number})
+
+
 @app.route("/generate_pdf", methods=["POST"])
 def generate_pdf():
     data = request.get_json()
