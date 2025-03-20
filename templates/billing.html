@@ -30,7 +30,7 @@
                 <div class="row mb-2">
                     <div class="col">
                         <label for="bill_number" class="form-label">Bill Number</label>
-                        <input type="text" class="form-control" id="bill_number" value="00003" readonly>
+                        <input type="text" class="form-control" id="bill_number" readonly>
                     </div>
                     <div class="col">
                         <label for="date" class="form-label">Date</label>
@@ -175,6 +175,19 @@
                     error: function (xhr, status, error) {
                         console.error("Error generating PDF:", error);
                         alert("Failed to generate PDF. Please try again.");
+                    }
+                });
+            });
+
+            $(document).ready(function () {
+                $.ajax({
+                    url: "/get_bill_number",
+                    type: "GET",
+                    success: function (response) {
+                        $("#bill_number").val(response.bill_number);
+                    },
+                    error: function () {
+                        alert("Failed to fetch bill number.");
                     }
                 });
             });
