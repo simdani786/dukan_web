@@ -20,13 +20,13 @@
             --success: #34a853;
             --warning: #fbbc04;
         }
-        
+
         body {
             background-color: #ffffff;
             color: var(--text-dark);
             font-family: 'Segoe UI', Arial, sans-serif;
         }
-        
+
         .container {
             background-color: #ffffff;
             border-radius: 8px;
@@ -35,7 +35,7 @@
             margin-bottom: 30px;
             padding: 25px;
         }
-        
+
         .section-card {
             background-color: #ffffff;
             border-radius: 8px;
@@ -44,41 +44,43 @@
             box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
             border-left: 4px solid var(--primary);
         }
-        
+
         .system-header {
             border-bottom: 2px solid var(--primary);
             padding-bottom: 15px;
             margin-bottom: 25px;
             color: var(--primary);
         }
-        
+
         .system-header h2 {
             font-weight: 600;
             letter-spacing: 0.5px;
             color: var(--primary);
         }
-        
-        .form-control, .form-select {
+
+        .form-control,
+        .form-select {
             background-color: #ffffff;
             border: 1px solid var(--border-color);
             color: var(--text-dark);
             border-radius: 6px;
             padding: 10px 15px;
         }
-        
-        .form-control:focus, .form-select:focus {
+
+        .form-control:focus,
+        .form-select:focus {
             background-color: #ffffff;
             color: var(--text-dark);
             border-color: var(--primary);
             box-shadow: 0 0 0 0.25rem rgba(26, 115, 232, 0.25);
         }
-        
+
         .form-label {
             color: var(--primary-dark);
             font-weight: 500;
             margin-bottom: 8px;
         }
-        
+
         .btn-primary {
             background-color: var(--primary);
             border-color: var(--primary);
@@ -86,12 +88,13 @@
             font-weight: 500;
             border-radius: 6px;
         }
-        
-        .btn-primary:hover, .btn-primary:focus {
+
+        .btn-primary:hover,
+        .btn-primary:focus {
             background-color: var(--primary-dark);
             border-color: var(--primary-dark);
         }
-        
+
         .btn-success {
             background-color: var(--success);
             border-color: var(--success);
@@ -99,62 +102,64 @@
             font-weight: 500;
             border-radius: 6px;
         }
-        
-        .btn-success:hover, .btn-success:focus {
+
+        .btn-success:hover,
+        .btn-success:focus {
             background-color: #2d9449;
             border-color: #2d9449;
         }
-        
+
         .btn-danger {
             background-color: var(--danger);
             border-color: var(--danger);
         }
-        
-        .btn-danger:hover, .btn-danger:focus {
+
+        .btn-danger:hover,
+        .btn-danger:focus {
             background-color: #d93025;
             border-color: #d93025;
         }
-        
+
         .btn-outline-secondary {
             color: var(--primary);
             border-color: var(--border-color);
         }
-        
+
         .btn-outline-secondary:hover {
             background-color: var(--primary-light);
             color: var(--primary);
             border-color: var(--primary);
         }
-        
+
         .table {
             color: var(--text-dark);
         }
-        
+
         .table thead th {
             background-color: var(--primary-light);
             color: var(--primary-dark);
             border-bottom: none;
             padding: 12px;
         }
-        
+
         .table tbody td {
             border-color: var(--border-color);
             padding: 12px;
         }
-        
+
         .total-display {
             background-color: var(--primary-light);
             border-radius: 6px;
             padding: 15px;
-            text-align: center ;
+            text-align: center;
             margin-top: 20px;
         }
-        
+
         .total-display h4 {
             color: var(--primary-dark);
             margin-bottom: 0;
         }
-        
+
 
         .status-indicator {
             display: inline-block;
@@ -165,23 +170,25 @@
             margin-right: 8px;
             animation: pulse 2s infinite;
         }
-        
+
         @keyframes pulse {
             0% {
                 box-shadow: 0 0 0 0 rgba(52, 168, 83, 0.4);
             }
+
             70% {
                 box-shadow: 0 0 0 10px rgba(52, 168, 83, 0);
             }
+
             100% {
                 box-shadow: 0 0 0 0 rgba(52, 168, 83, 0);
             }
         }
-        
+
         .text-muted {
             color: #5f6368 !important;
         }
-        
+
         .input-group-text {
             background-color: var(--primary-light);
             color: var(--primary);
@@ -330,19 +337,19 @@
             }
             
             checkEmptyState();
-
+    
             // Add Item
             $("#add_item").click(function (e) {
                 e.preventDefault();
                 let itemName = $("#item_name_input").val().trim();
                 let quantity = parseInt($("#quantity").val());
                 let price = parseFloat($("#price").val());
-
+    
                 if (!itemName || quantity <= 0 || price < 0) {
                     alert("Please enter valid item details.");
                     return;
                 }
-
+    
                 let total = (quantity * price).toFixed(2);
                 itemCount++;
                 $("#items_table").append(
@@ -361,14 +368,14 @@
                 updateTotalAmount();
                 checkEmptyState();
             });
-
+    
             // Delete Item
             $(document).on("click", ".delete-item", function () {
                 $(this).closest("tr").remove();
                 updateTotalAmount();
                 checkEmptyState();
             });
-
+    
             // Update Total Amount
             function updateTotalAmount() {
                 let totalAmount = 0;
@@ -398,7 +405,7 @@
                     date: $("#date").val(),
                     items: []
                 };
-
+    
                 // Collect items from the table
                 $("#items_table tr").each(function () {
                     let row = $(this).find("td");
@@ -411,7 +418,7 @@
                         });
                     }
                 });
-
+    
                 // Send data to the server
                 $.ajax({
                     url: "/generate_pdf",
@@ -428,7 +435,7 @@
                     }
                 });
             });
-
+    
             // Get bill number
             $.ajax({
                 url: "/get_bill_number",
@@ -441,27 +448,53 @@
                     $("#bill_number").val("BL-" + Math.floor(Math.random() * 10000));
                 }
             });
-
-            // Speech Recognition
+    
             if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-                const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-                recognition.continuous = false;
-                recognition.interimResults = false;
-                recognition.lang = 'en-US';
-                $("#start_speech").click(() => {
-                    recognition.start();
-                    $("#start_speech").text("Listening...");
-                });
-                recognition.onresult = (event) => {
-                    $("#item_name_input").val(event.results[0][0].transcript);
-                    $("#start_speech").text("🎤");
-                };
-                recognition.onerror = () => $("#start_speech").text("🎤");
-                recognition.onend = () => $("#start_speech").text("🎤");
-            } else {
-                $("#start_speech").hide();
-            }
-        });
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+            recognition.maxAlternatives = 1;
+            
+            let recognitionTimeout;
+            
+            $("#start_speech").click(() => {
+                recognition.start();
+                console.log("Speech recognition started");
+                $("#start_speech").text("Listening...");
+
+                recognitionTimeout = setTimeout(() => {
+                    recognition.stop();
+                    console.log("Speech recognition stopped due to timeout");
+                }, 21000); // 21 seconds
+            });
+            
+            recognition.onresult = (event) => {
+                clearTimeout(recognitionTimeout);
+                $("#item_name_input").val(event.results[0][0].transcript);
+                console.log("Speech recognition result:", event.results[0][0].transcript);
+                $("#start_speech").text("🎤");
+            };
+            
+            recognition.onerror = (event) => {
+                clearTimeout(recognitionTimeout);
+                console.error("Speech recognition error:", event.error);
+                if (event.error === 'network') {
+                    alert("Network error occurred during speech recognition. Please check your internet connection and try again.");
+                }
+                $("#start_speech").text("🎤");
+            };
+
+            recognition.onend = () => {
+                clearTimeout(recognitionTimeout);
+                console.log("Speech recognition ended");
+                $("#start_speech").text("🎤");
+            };
+        } else {
+            $("#start_speech").hide();
+            console.log("Speech recognition not supported in this browser");
+        }
+    });
     </script>
 </body>
 
