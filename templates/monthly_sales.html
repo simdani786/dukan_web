@@ -53,7 +53,7 @@
                         <a class="nav-link" href="/sales">Sales</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link active" href="/monthly_sales">Monthly Sales Graph</a>
+                        <a class="nav-link active" href="/">Monthly Sales Graph</a>
                     </li>
                 </ul>
             </div>
@@ -144,7 +144,7 @@
         $(document).ready(function() {
             // Fetch data from the API
             $.ajax({
-                url: '/api/monthly_sales_data',
+                url: '/monthly_sales_data',
                 type: 'GET',
                 dataType: 'json',
                 success: function(response) {

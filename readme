@@ -1,17 +1,24 @@
-flask_app/
+Dukan_Web/
 │
-├── static/
-│   ├── bills/                  # Folder to store generated PDFs
-│   ├── logo.png                # Shop logo image (optional)
-│   └── Qr.png                  # QR code image (optional)
-│
+├── app.py                # Main entry point
+├── init_db.py             # Database Initialization
+├── routes/
+│   ├── __init__.py        # Makes 'routes' a package
+│   ├── billing.py         # Billing API routes
+│   ├── sales.py           # Sales and Reporting API routes
+│   ├── pdf.py             # PDF Generation API routes
+│   ├── utils.py           # Utility Functions (e.g., Generate Bill Number)
 ├── templates/
-│   ├── index.html              # Home page template
-│   ├── billing.html            # Billing page template
-│   └── sales.html              # Sales data page template
-│
-├── sales.db                    # SQLite database file
-│
-├── app.py                      # Main Flask application file
-│
-└── requirements.txt            # Python dependencies (optional, but recommended)
+│   ├── home.html
+│   ├── billing.html
+│   ├── sales.html
+│   ├── monthly_sales.html
+├── static/
+│   ├── logo.png
+│   ├── Qr.png
+│   ├── bills/
+└── requirements.txt
+
+
+test_db.py is used to populate data in the DB 
+run command pytho3 app.py
