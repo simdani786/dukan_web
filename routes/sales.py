@@ -36,8 +36,19 @@ def sales_data():
     # Fetch all sales data using * to get all columns
     cursor.execute('SELECT * FROM sales ORDER BY DATE(date) ASC')
     sales_data = cursor.fetchall()
-    if sales_data:
-        print("First row sample:", sales_data[0])
+    # if sales_data:
+    #     print("First row sample:", sales_data[0])
+
+    total_sales =0 
+    count=0   
+
+    for row in sales_data:
+        count=count+1
+        total_sales=total_sales+row[5]
+
+    Totalsales=int(total_sales)
+    avgsales=Totalsales/count
+
     
     # Extract unique years and months from the data
     years = []
@@ -62,7 +73,11 @@ def sales_data():
         months=months,
         format_currency=format_currency,
         formatDate=format_date,
-        getMonthName=get_month_name
+        getMonthName=get_month_name,
+        Totalsales=Totalsales,
+        count=count,
+        avgsales=avgsales
+
     )
 
 

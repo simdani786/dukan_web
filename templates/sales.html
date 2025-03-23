@@ -257,15 +257,15 @@
         <div class="stats-container">
             <div class="stat-card">
                 <div class="stat-card-title">Total Sales</div>
-                <div class="stat-card-value" id="total-sales">₹0</div>
+                <div class="stat-card-value" id="total-sales">₹{{Totalsales}}</div>
             </div>
             <div class="stat-card">
                 <div class="stat-card-title">Total Records</div>
-                <div class="stat-card-value" id="total-records">0</div>
+                <div class="stat-card-value" id="total-records">{{count}}</div>
             </div>
             <div class="stat-card">
                 <div class="stat-card-title">Avg. Sale Value</div>
-                <div class="stat-card-value" id="avg-sale">₹0</div>
+                <div class="stat-card-value" id="avg-sale">₹{{avgsales}}</div>
             </div>
             <div class="stat-card">
                 <div class="stat-card-title">Period</div>
@@ -382,8 +382,8 @@
             });
 
             // Update stats display
-            document.getElementById('total-sales').textContent = '₹' + totalAmount.toLocaleString('en-IN');
-            document.getElementById('total-records').textContent = recordCount;
+            // document.getElementById('total-sales').textContent = '₹' + totalAmount.toLocaleString('en-IN');
+            // document.getElementById('total-records').textContent = recordCount;
 
             const avgSale = recordCount > 0 ? totalAmount / recordCount : 0;
             document.getElementById('avg-sale').textContent = '₹' + avgSale.toLocaleString('en-IN', { maximumFractionDigits: 2 });
