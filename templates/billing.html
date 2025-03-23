@@ -7,95 +7,328 @@
     <title>Billing System</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --primary-light: #e8f0fe;
+            --accent: #4285f4;
+            --text-dark: #202124;
+            --text-light: #f8f9fa;
+            --border-color: #dadce0;
+            --danger: #ea4335;
+            --success: #34a853;
+            --warning: #fbbc04;
+        }
+        
+        body {
+            background-color: #ffffff;
+            color: var(--text-dark);
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            margin-bottom: 30px;
+            padding: 25px;
+        }
+        
+        .section-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .system-header {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            color: var(--primary);
+        }
+        
+        .system-header h2 {
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: var(--primary);
+        }
+        
+        .form-control, .form-select {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
+            border-radius: 6px;
+            padding: 10px 15px;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            background-color: #ffffff;
+            color: var(--text-dark);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(26, 115, 232, 0.25);
+        }
+        
+        .form-label {
+            color: var(--primary-dark);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            padding: 8px 18px;
+            font-weight: 500;
+            border-radius: 6px;
+        }
+        
+        .btn-primary:hover, .btn-primary:focus {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            border-color: var(--success);
+            padding: 10px 24px;
+            font-weight: 500;
+            border-radius: 6px;
+        }
+        
+        .btn-success:hover, .btn-success:focus {
+            background-color: #2d9449;
+            border-color: #2d9449;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            border-color: var(--danger);
+        }
+        
+        .btn-danger:hover, .btn-danger:focus {
+            background-color: #d93025;
+            border-color: #d93025;
+        }
+        
+        .btn-outline-secondary {
+            color: var(--primary);
+            border-color: var(--border-color);
+        }
+        
+        .btn-outline-secondary:hover {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .table {
+            color: var(--text-dark);
+        }
+        
+        .table thead th {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            border-bottom: none;
+            padding: 12px;
+        }
+        
+        .table tbody td {
+            border-color: var(--border-color);
+            padding: 12px;
+        }
+        
+        .total-display {
+            background-color: var(--primary-light);
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center ;
+            margin-top: 20px;
+        }
+        
+        .total-display h4 {
+            color: var(--primary-dark);
+            margin-bottom: 0;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--success);
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(52, 168, 83, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(52, 168, 83, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(52, 168, 83, 0);
+            }
+        }
+        
+        .text-muted {
+            color: #5f6368 !important;
+        }
+        
+        .input-group-text {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border-color: var(--border-color);
+        }
+    </style>
 </head>
 
-<body class="bg-info">
-    <div class="container mt-4 bg-light p-4 rounded">
-        <h2 class="text-center">Billing System</h2>
+<body>
+    <div class="container">
+        <div class="system-header d-flex justify-content-between align-items-center">
+            <h2><i class="status-indicator"></i> Billing System</h2>
+            <div class="date-display">
+                <span id="current-time" style="color: var(--primary-dark)"></span>
+            </div>
+        </div>
 
         <!-- Customer Details -->
-        <div class="border p-3 mb-3">
-            <h4>Customer Details</h4>
+        <div class="section-card mb-4">
+            <h4 class="mb-3" style="color: var(--primary);">Customer Details</h4>
             <form id="billing-form">
-                <div class="row mb-2">
-                    <div class="col">
+                <div class="row mb-3">
+                    <div class="col-md-6 mb-3 mb-md-0">
                         <label for="customer_name" class="form-label">Customer Name</label>
                         <input type="text" class="form-control" id="customer_name" required>
                     </div>
-                    <div class="col">
+                    <div class="col-md-6">
                         <label for="bus_number" class="form-label">Bus Number</label>
                         <input type="text" class="form-control" id="bus_number" required>
                     </div>
                 </div>
-                <div class="row mb-2">
-                    <div class="col">
+                <div class="row">
+                    <div class="col-md-6 mb-3 mb-md-0">
                         <label for="bill_number" class="form-label">Bill Number</label>
-                        <input type="text" class="form-control" id="bill_number" readonly>
+                        <div class="input-group">
+                            <span class="input-group-text">SNo.</span>
+                            <input type="text" class="form-control" id="bill_number" readonly>
+                        </div>
                     </div>
-                    <div class="col">
+                    <div class="col-md-6">
                         <label for="date" class="form-label">Date</label>
-                        <input type="date" class="form-control" id="date" value="2025-03-16">
+                        <input type="date" class="form-control" id="date" value="2025-03-22">
                     </div>
                 </div>
             </form>
         </div>
 
         <!-- Item Details -->
-        <div class="border p-3 mb-3">
-            <h4>Item Details</h4>
-            <div class="row">
-                <div class="col">
+        <div class="section-card mb-4">
+            <h4 class="mb-3" style="color: var(--primary);">Item Details</h4>
+            <div class="row g-3 align-items-end">
+                <div class="col-md-5">
                     <label for="item_name_input" class="form-label">Item Name</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" id="item_name_input" placeholder="Item Name">
+                        <input type="text" class="form-control" id="item_name_input" placeholder="Enter item name">
                         <button class="btn btn-outline-secondary" type="button" id="start_speech">🎤</button>
                     </div>
                 </div>
-                <div class="col">
+                <div class="col-md-2">
                     <label for="quantity" class="form-label">Quantity</label>
                     <input type="number" class="form-control" id="quantity" value="1" min="1">
                 </div>
-                <div class="col">
+                <div class="col-md-3">
                     <label for="price" class="form-label">Price</label>
-                    <input type="number" class="form-control" id="price" value="0" min="0" step="0.01">
+                    <div class="input-group">
+                        <span class="input-group-text">₹</span>
+                        <input type="number" class="form-control" id="price" value="0" min="0" step="100">
+                    </div>
                 </div>
-                <div class="col align-self-end">
-                    <button class="btn btn-primary" id="add_item">Add Item</button>
+                <div class="col-md-2">
+                    <button class="btn btn-primary w-100" id="add_item">
+                        Add Item
+                    </button>
                 </div>
             </div>
         </div>
 
         <!-- Added Items -->
-        <div class="border p-3">
-            <h4>Added Items</h4>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Item Name</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Total</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="items_table">
-                    <!-- Dynamic Rows -->
-                </tbody>
-            </table>
+        <div class="section-card">
+            <h4 class="mb-3" style="color: var(--primary);">Items List</h4>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th width="5%">#</th>
+                            <th width="35%">Item Name</th>
+                            <th width="15%">Quantity</th>
+                            <th width="15%">Price</th>
+                            <th width="15%">Total</th>
+                            <th width="15%">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="items_table">
+                        <!-- Dynamic Rows -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty state message -->
+            <div id="empty-state" class="text-center py-4 text-muted">
+                <p>No items added yet. Add items using the form above.</p>
+            </div>
         </div>
 
         <!-- Total Amount -->
-        <div class="text-end mt-3">
-            <h4>Total Amount: <span id="total_amount">0.00</span></h4>
+        <div class="total-display">
+            <h4>Total Amount: ₹<span id="total_amount">0.00</span></h4>
         </div>
 
-        <button class="btn btn-success mt-3" id="generate_bill">Generate Bill</button>
+        <div class="text-center mt-4">
+            <button class="btn btn-success px-5" id="generate_bill">
+                Generate Bill
+            </button>
+        </div>
     </div>
 
     <script>
         $(document).ready(function () {
             let itemCount = 0;
+            
+            // Update date and time
+            function updateDateTime() {
+                const now = new Date();
+                const options = { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                };
+                $("#current-time").text(now.toLocaleDateString('en-US', options));
+            }
+            
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            
+            // Check for empty table
+            function checkEmptyState() {
+                if ($("#items_table tr").length === 0) {
+                    $("#empty-state").show();
+                } else {
+                    $("#empty-state").hide();
+                }
+            }
+            
+            checkEmptyState();
 
             // Add Item
             $("#add_item").click(function (e) {
@@ -112,35 +345,51 @@
                 let total = (quantity * price).toFixed(2);
                 itemCount++;
                 $("#items_table").append(
-                    `<tr>
+                    `<tr class="item-row">
                         <td>${itemCount}</td>
                         <td>${itemName}</td>
                         <td>${quantity}</td>
-                        <td>${price.toFixed(2)}</td>
-                        <td>${total}</td>
+                        <td>₹${price.toFixed(2)}</td>
+                        <td>₹${total}</td>
                         <td><button class='btn btn-danger btn-sm delete-item'>Delete</button></td>
                     </tr>`
                 );
-                $("#item_name_input, #quantity, #price").val("");
-                $("#quantity").val(1);
+                $("#item_name_input").val("");
+                $("#price").val("0");
+                $("#quantity").val("1");
                 updateTotalAmount();
+                checkEmptyState();
             });
 
             // Delete Item
             $(document).on("click", ".delete-item", function () {
                 $(this).closest("tr").remove();
                 updateTotalAmount();
+                checkEmptyState();
             });
 
             // Update Total Amount
             function updateTotalAmount() {
                 let totalAmount = 0;
                 $("#items_table tr").each(function () {
-                    totalAmount += parseFloat($(this).find("td:eq(4)").text()) || 0;
+                    let value = $(this).find("td:eq(4)").text().replace("₹", "");
+                    totalAmount += parseFloat(value) || 0;
                 });
                 $("#total_amount").text(totalAmount.toFixed(2));
             }
+            
+            // Generate Bill
             $("#generate_bill").click(function () {
+                if ($("#items_table tr").length === 0) {
+                    alert("Please add at least one item before generating a bill.");
+                    return;
+                }
+                
+                if (!$("#customer_name").val() || !$("#bus_number").val()) {
+                    alert("Please fill in all customer details.");
+                    return;
+                }
+                
                 let formData = {
                     customer_name: $("#customer_name").val(),
                     bus_number: $("#bus_number").val(),
@@ -156,8 +405,8 @@
                         formData.items.push({
                             name: row.eq(1).text(),
                             quantity: row.eq(2).text(),
-                            price: row.eq(3).text(),
-                            total: row.eq(4).text()
+                            price: row.eq(3).text().replace("₹", ""),
+                            total: row.eq(4).text().replace("₹", "")
                         });
                     }
                 });
@@ -179,17 +428,17 @@
                 });
             });
 
-            $(document).ready(function () {
-                $.ajax({
-                    url: "/get_bill_number",
-                    type: "GET",
-                    success: function (response) {
-                        $("#bill_number").val(response.bill_number);
-                    },
-                    error: function () {
-                        alert("Failed to fetch bill number.");
-                    }
-                });
+            // Get bill number
+            $.ajax({
+                url: "/get_bill_number",
+                type: "GET",
+                success: function (response) {
+                    $("#bill_number").val(response.bill_number);
+                },
+                error: function () {
+                    alert("Failed to fetch bill number.");
+                    $("#bill_number").val("BL-" + Math.floor(Math.random() * 10000));
+                }
             });
 
             // Speech Recognition
