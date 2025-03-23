@@ -36,16 +36,15 @@ def sales_data():
     # Fetch all sales data using * to get all columns
     cursor.execute('SELECT * FROM sales ORDER BY DATE(date) ASC')
     sales_data = cursor.fetchall()
-    if sales_data:
-        print("First row sample:", sales_data[0])
+    # if sales_data:
+    #     print("First row sample:", sales_data[0])
 
     total_sales =0 
     count=0   
 
     for row in sales_data:
         count=count+1
-        for row in sales_data:
-            total_sales=total_sales+row[5]
+        total_sales=total_sales+row[5]
 
     Totalsales=int(total_sales)
     avgsales=Totalsales/count
@@ -99,7 +98,6 @@ def monthly_sales_data():
 
         months = [datetime.strptime(row[0], '%Y-%m').strftime('%b %Y') for row in rows]
         sales_amounts = [float(row[1]) for row in rows]
-        print("========",sum(sales_amounts))
 
         return jsonify({'labels': months, 'data': sales_amounts})
 
